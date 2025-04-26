@@ -20,6 +20,7 @@
     "chalk": "^5.4.1",
     "chart.js": "4.2.1",
     "dotenv": "^16.4.7",
+    "ethers": "^6.13.7",
     "next": "13.4.8",
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",

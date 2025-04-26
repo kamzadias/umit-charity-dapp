@@ -1,7 +1,7 @@
 [build]
   base    = "frontend"
   command = "npm ci && npm run build && npm run export"
-  publish = "frontend/out"
+  publish = "out"
 
 [build.environment]
   CLIENT_ID = "$CLIENT_ID"

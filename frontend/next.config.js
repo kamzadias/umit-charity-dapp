@@ -5,10 +5,8 @@ const nextConfig = {
     productionBrowserSourceMaps: false,
     output: 'export',
 
-    experimental: {
-        images: {
-            unoptimized: true
-        }
+    images: {
+        unoptimized: true
     },
 
     env: {
