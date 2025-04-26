@@ -4,7 +4,8 @@
   publish = "out"
 
 [build.environment]
-  CLIENT_ID = "$CLIENT_ID"
+  CLIENT_ID                   = "$CLIENT_ID"
+  NETLIFY_NEXT_PLUGIN_SKIP    = "true"
 
 [[redirects]]
   from   = "/*"
