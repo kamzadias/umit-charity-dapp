@@ -8,7 +8,7 @@ import { LayoutContext } from '@/layout/context/layoutcontext';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import YouTube from 'react-youtube';
 import { useStateContext } from '@/layout/context/statecontext';
-import { ethers } from 'ethers';
+import { formatEther } from 'ethers';
 
 const Dashboard = () => {
     const [isHidden, setIsHidden] = useState(false);
@@ -39,7 +39,7 @@ const Dashboard = () => {
         fetchStats();
     }, [getPlatformStats]);
 
-    const formattedTotalAmount = platformStats ? parseFloat(ethers.utils.formatEther(platformStats.totalAmountCollected.toString())).toFixed(2) : '0';
+    const formattedTotalAmount = platformStats ? parseFloat(formatEther(platformStats.totalAmountCollected.toString())).toFixed(2) : '0';
 
     return (
         <div className="surface-0 flex justify-content-center">

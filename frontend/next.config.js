@@ -13,8 +13,21 @@ const nextConfig = {
         NEXT_PUBLIC_CLIENT_ID: process.env.CLIENT_ID
     },
 
-    webpack: (config) => {
-        config.externals.push('pino-pretty', 'lokijs', 'encoding');
+    webpack(config, { isServer }) {
+        config.externals?.push('pino-pretty', 'lokijs', 'encoding');
+
+        if (!isServer) {
+            config.resolve.fallback = {
+                ...config.resolve.fallback,
+                fs: false,
+                net: false,
+                tls: false,
+                ws: false,
+                bufferutil: false,
+                'utf-8-validate': false
+            };
+        }
+
         return config;
     }
 };
