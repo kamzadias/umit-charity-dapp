@@ -3,7 +3,6 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     productionBrowserSourceMaps: false,
-    output: 'export',
 
     images: {
         unoptimized: true
@@ -14,6 +13,7 @@ const nextConfig = {
     },
 
     webpack(config, { isServer }) {
+        config.externals = config.externals || [];
         config.externals?.push('pino-pretty', 'lokijs', 'encoding');
 
         if (!isServer) {
