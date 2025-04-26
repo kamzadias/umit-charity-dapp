@@ -1,6 +1,6 @@
 'use client';
 import React, { useContext, createContext, ReactNode, useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import { parseEther, formatEther } from 'ethers';
 import { createThirdwebClient, getContract, prepareContractCall, readContract } from 'thirdweb';
 import { sepolia } from 'thirdweb/chains';
 import { useSendAndConfirmTransaction, useActiveAccount } from 'thirdweb/react';
@@ -45,7 +45,7 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
             const transaction = prepareContractCall({
                 contract,
                 method: 'function createCampaign(address _owner, string _title, string _description, uint256 _target, uint256 _deadline, string _image) returns (uint256)',
-                params: [activeAccount.address, form.title, form.description, ethers.utils.parseEther(form.target).toBigInt(), BigInt(Math.floor(new Date(form.deadline).getTime() / 1000)), form.image]
+                params: [activeAccount.address, form.title, form.description, parseEther(form.target), BigInt(Math.floor(new Date(form.deadline).getTime() / 1000)), form.image]
             });
             const data = await sendTx(transaction);
             console.log('Campaign created successfully: ', data);
@@ -70,9 +70,9 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
                 owner: campaign.owner,
                 title: campaign.title,
                 description: campaign.description,
-                target: ethers.utils.formatEther(campaign.target.toString()),
+                target: formatEther(campaign.target.toString()),
                 deadline: Number(campaign.deadline),
-                amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()),
+                amountCollected: formatEther(campaign.amountCollected.toString()),
                 image: campaign.image,
                 fundsWithdrawn: campaign.fundsWithdrawn,
                 cancelled: campaign.cancelled,
@@ -105,7 +105,7 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
                 contract,
                 method: 'function donateToCampaign(uint256 _id) payable',
                 params: [BigInt(pId)],
-                value: ethers.utils.parseEther(amount).toBigInt()
+                value: parseEther(amount)
             });
             const data = await sendTx(transaction);
             console.log('Donation successful: ', data);
@@ -134,7 +134,7 @@ export const StateContextProvider = ({ children }: { children: ReactNode }) => {
                 params: [BigInt(pId)]
             });
             const addresses = data[0] as string[];
-            const donations = (data[1] as any[]).map((don: any) => ethers.utils.formatEther(don.toString()));
+            const donations = (data[1] as any[]).map((don: any) => formatEther(don.toString()));
             const donationTimestamps = (data[2] as any[]).map((ts: any) => ts.toString());
             return { addresses, donations, donationTimestamps };
         } catch (error) {
