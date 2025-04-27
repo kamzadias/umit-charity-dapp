@@ -7,7 +7,7 @@ interface SimpleLayoutProps {
 }
 
 export const metadata: Metadata = {
-    title: 'Ümıt',
+    title: 'Ümıt – Transparent Charity on Blockchain',
     description: 'Empowering Charitable Giving with Blockchain.'
 };
 
