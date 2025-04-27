@@ -38,7 +38,7 @@ const AppFooter = () => {
 
                         <div className="col-12 md:col-3 mt-4 md:mt-0">
                             <h4 className="font-medium text-2xl line-height-3 mb-3 text-900">Actions</h4>
-                            <Link href="/campaign" className="line-height-3 text-xl block cursor-pointer mb-2 text-700">
+                            <Link href="/create-campaign" className="line-height-3 text-xl block cursor-pointer mb-2 text-700">
                                 Create Campaign
                             </Link>
                             <Link href="/display-campaigns" className="line-height-3 text-xl block cursor-pointer text-700">
