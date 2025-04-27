@@ -63,8 +63,6 @@ export default function CampaignDetailsPage({ params }: PageProps) {
     const [filters, setFilters] = useState<DataTableFilterMeta>({});
     const [globalFilterValue, setGlobalFilterValue] = useState('');
 
-    const storageKey = `claimedRefund_${campaign.pId}_${address}`;
-
     const initFilters = () => {
         setFilters({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -90,11 +88,13 @@ export default function CampaignDetailsPage({ params }: PageProps) {
 
     useEffect(() => {
         if (!campaign || !address) return;
-        const stored = localStorage.getItem(storageKey);
+    
+        const key = `claimedRefund_${campaign.pId}_${address}`;
+        const stored = localStorage.getItem(key);
         if (stored === 'true') {
           setHasClaimedRefund(true);
         }
-      }, [campaign?.pId, address]);
+      }, [campaign, address]);
       
     const fetchCampaign = async () => {
         try {
@@ -267,6 +267,8 @@ export default function CampaignDetailsPage({ params }: PageProps) {
         try {
             setIsLoading(true);
             await claimRefund(campaign.pId);
+            const key = `claimedRefund_${campaign.pId}_${address}`;
+            localStorage.setItem(key, 'true');
             setHasClaimedRefund(true);
             toast.current?.show({
                 severity: 'info',
