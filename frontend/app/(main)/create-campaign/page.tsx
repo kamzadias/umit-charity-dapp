@@ -123,9 +123,9 @@ const CreateCampaign = () => {
             <Toast ref={toast} position="top-right" />
             <div className="grid align-items-stretch justify-content-center md:px-6">
                 <div className="col-12 md:col-7 flex">
-                    <div className="card shadow-2 border-round-xl flex-grow-1 flex flex-column p-8">
-                        <h2 className="text-3xl font-bold m-0">Create a campaign</h2>
-                        <p className="text-600 mt-4 mb-6">Our team would love to hear from you!</p>
+                    <div className="card shadow-2 border-round-xl flex-grow-1 flex flex-column md:p-8">
+                        <h2 className="text-2xl font-bold m-0 md:text-left text-center">Create a campaign</h2>
+                        <p className="text-600 mt-4 mb-6 md:text-left text-center md:text-lg text-base">Our team would love to hear from you!</p>
                         <form onSubmit={handleSubmit} className="flex-grow-1">
                             <div className="field">
                                 <label htmlFor="title">Campaign Title</label>
@@ -145,9 +145,9 @@ const CreateCampaign = () => {
                                 <label htmlFor="description">Description</label>
                                 <InputTextarea id="description" className="w-full" placeholder="Enter your story" value={form.description} onChange={(e) => handleChange(e, 'description')} rows={5} required />
                             </div>
-                            <div className="w-full flex align-items-center p-4 bg-primary border-round-md my-4" style={{ height: '120px' }}>
-                                <i className="pi pi-wallet text-3xl text-white mr-3" />
-                                <h4 className="font-bold text-white text-xl md:text-2xl m-0">You will receive 100% of the collected amount</h4>
+                            <div className="flex align-items-center p-4 bg-primary border-round-md my-4">
+                                <i className="pi pi-wallet md:text-2xl text-xl text-white mr-3" />
+                                <h4 className="font-bold text-white md:text-lg text-base m-0">You will receive 100% of the collected amount</h4>
                             </div>
                             <div className="field">
                                 <label htmlFor="image">Campaign Image URL</label>

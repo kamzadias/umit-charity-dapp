@@ -17,7 +17,7 @@ const NotFoundPage = () => {
                         <span className="font-bold text-3xl mb-2" style={{ color: '#FF6B6B' }}>
                             404
                         </span>
-                        <h1 className="text-900 font-bold text-5xl mb-2">Page Not Found</h1>
+                        <h1 className="text-900 font-bold md:text-5xl text-4xl mb-2">Page Not Found</h1>
                         <div className="text-600 mb-5">Oops! The page you’re looking for doesn’t exist.</div>
                         <Link href="/" className="w-full flex align-items-center py-5 border-300 border-bottom-1">
                             <span className="flex justify-content-center align-items-center bg-cyan-400 border-round" style={{ height: '3.5rem', width: '3.5rem' }}>

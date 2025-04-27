@@ -14,7 +14,6 @@ import { useStateContext } from '@/layout/context/statecontext';
 import { Tooltip } from 'primereact/tooltip';
 import { shortenAddress } from 'thirdweb/utils';
 import { Image } from 'primereact/image';
-import { useActiveAccount } from 'thirdweb/react';
 
 interface PageProps {
     params: {
@@ -297,12 +296,12 @@ export default function CampaignDetailsPage({ params }: PageProps) {
 
     const renderHeader = () => {
         return (
-            <div className="flex justify-content-between mb-3">
-                <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
-                <span className="p-input-icon-left">
+            <div className="flex md:justify-content-between flex-column md:flex-row mb-3">
+                <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} className="w-full md:w-auto" />{' '}
+                <div className="p-input-icon-left mt-2 md:mt-0 w-full md:w-auto">
                     <i className="pi pi-search" />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search..." />
-                </span>
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search..." className="w-full" />
+                </div>
             </div>
         );
     };
@@ -333,10 +332,10 @@ export default function CampaignDetailsPage({ params }: PageProps) {
             <Toast ref={toast} position="top-right" />
 
             <div className="grid">
-                <div className="col-12">
-                    <div className="card">
+                <div className="col-12 md:px-1 px-0">
+                    <div className="card md:px-4 px-1">
                         <div className="flex flex-column md:flex-row justify-content-between align-items-start p-2">
-                            <h2 className="text-3xl font-bold m-0">{campaign.title || 'Campaign Title'}</h2>
+                            <h2 className="md:text-3xl text-xl font-bold m-0">{campaign.title || 'Campaign Title'}</h2>
                         </div>
 
                         <div className="mb-4 px-2 text-base text-500">Created date: {creationDate}</div>
@@ -353,6 +352,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
                                             width: '100%',
                                             height: '410px'
                                         }}
+                                        alt="Campaign Image"
                                     />
                                 </div>
                             </div>
@@ -380,7 +380,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
                         <div className="col-12 md:col-10 mb-4">
                             <ProgressBar value={barPercentage} style={{ height: '15px', borderRadius: '6px' }} />
                         </div>
-                        
+
                         <div className="mb-4 px-3">
                             <h3 className="text-xl font-bold mb-2">Description</h3>
                             <p>{campaign.description}</p>
@@ -391,17 +391,32 @@ export default function CampaignDetailsPage({ params }: PageProps) {
                             <h3 className="text-xl font-bold mb-2">Campaign Creator</h3>
                             <div className="flex align-items-center gap-2">
                                 <i className="pi pi-wallet"></i>
-                                <p className="creator-block m-0" data-pr-tooltip="Funds will be sent to this address." data-pr-position="right" data-pr-mousetrack>
-                                    {displayedAddress}
+                                <p className={`creator-block m-0 ownerText ${showFullAddress ? 'wrapAddress' : ''}`} data-pr-tooltip="Funds will be sent to this address." data-pr-position="right" data-pr-mousetrack>
+                                    {showFullAddress ? campaign.owner : shortenAddress(campaign.owner)}
                                 </p>
                                 <Button icon="pi pi-eye" rounded text aria-label="Toggle full address" onClick={() => setShowFullAddress((prev) => !prev)} />
                             </div>
+
+                            <style jsx>{`
+                                .ownerText {
+                                    /* по умолчанию обрезаем и одну строку */
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                }
+                                .wrapAddress {
+                                    /* при показе полного адреса переносим и разбиваем слово */
+                                    overflow: visible;
+                                    white-space: normal;
+                                    word-break: break-all;
+                                }
+                            `}</style>
                         </div>
 
                         <div className="grid">
                             <div className="col-12 md:col-8">
-                                <div className="card">
-                                    <h4 className="mb-3">Donators</h4>
+                                <div className="card md:px-4 px-1">
+                                    <h4 className="mb-3 p-2">Donators</h4>
                                     <DataTable
                                         value={donators}
                                         paginator
