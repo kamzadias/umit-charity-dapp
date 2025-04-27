@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
-import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { DataView, DataViewLayoutOptions, DataViewPageEvent } from 'primereact/dataview';
 import { Button } from 'primereact/button';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
@@ -21,6 +21,10 @@ const formatNumber = (value: number): string => parseFloat(value.toFixed(3)).toS
 const DisplayCampaigns = () => {
     const { getCampaigns, address, contract } = useStateContext();
     const router = useRouter();
+
+    const [first, setFirst] = useState(0);
+    const dvRef = useRef<HTMLDivElement>(null);
+    const rows = 6;
 
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [filteredCampaigns, setFilteredCampaigns] = useState<Campaign[] | null>(null);
@@ -68,6 +72,11 @@ const DisplayCampaigns = () => {
             setSortOrder(1);
             setSortField(value);
         }
+    };
+
+    const onPage = (event: DataViewPageEvent) => {
+        setFirst(event.first);
+        dvRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
     };
 
     const dataViewHeader = (
@@ -231,16 +240,31 @@ const DisplayCampaigns = () => {
     const bottomThreeCampaigns = [...campaigns]
         .filter((campaign) => {
             const daysLeftNumber = (new Date(campaign.deadline * 1000).getTime() - Date.now()) / (1000 * 3600 * 24);
-            return daysLeftNumber >= 0 && !campaign.cancelled;;
+            return daysLeftNumber >= 0 && !campaign.cancelled;
         })
         .sort((a, b) => parseFloat(a.amountCollected) - parseFloat(b.amountCollected))
         .slice(0, 3);
     return (
         <div className="grid">
             <div className="col-12 md:px-1 px-0">
-                <div className="card md:px-2 px-1">
-                    <h2 className="md:text-2xl text-xl px-3">Campaigns</h2>
-                    <DataView value={filteredCampaigns || campaigns} layout={layout} paginator rows={6} sortOrder={sortOrder} sortField={sortField} itemTemplate={itemTemplate} header={dataViewHeader} emptyMessage="No campaigns found." />
+                <div ref={dvRef} className="col-12 md:px-1 px-0">
+                    <div className="card md:px-2 px-1">
+                        <h2 className="md:text-2xl text-xl px-3">Campaigns</h2>
+                        <p className="mb-4 px-3">Browse all active fundraising campaigns below—discover each project’s goal, deadline, and story to find a cause you’re passionate about.</p>
+                        <DataView
+                            value={filteredCampaigns || campaigns}
+                            layout={layout}
+                            paginator
+                            first={first}
+                            rows={rows}
+                            onPage={onPage}
+                            sortOrder={sortOrder}
+                            sortField={sortField}
+                            header={dataViewHeader}
+                            itemTemplate={itemTemplate}
+                            emptyMessage="No campaigns to display right now. Why not start your own?"
+                        />
+                    </div>
                 </div>
             </div>
             <div className="col-12 md:px-1 px-0 mt-5">
@@ -316,7 +340,7 @@ const DisplayCampaigns = () => {
                         ) : (
                             <div className="col-12">
                                 <div className="p-5 border-round shadow-2 text-center">
-                                    <p className="text-600 mb-3">Currently no campaigns need support</p>
+                                    <p className="text-600 mb-3">No underfunded campaigns at the moment. Be the first to launch one and help someone in need!</p>{' '}
                                     <Button label="Create your own campaign" onClick={() => router.push('/create-campaign')} />
                                 </div>
                             </div>

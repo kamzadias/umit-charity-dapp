@@ -183,7 +183,7 @@ const Dashboard = () => {
                         <h1 className="title text-white uppercase">Empowering Charitable Giving with Blockchain</h1>
                         <p className="mt-4 text-white description">Experience a revolutionary charity platform that leverages blockchain for transparent, secure, and impactful donations to causes that matter.</p>
                         <div className="mt-10 flex align-items-center gap-3">
-                            <Link href="/campaign">
+                            <Link href="/create-campaign">
                                 <Button className="text-lg">Get Started</Button>
                             </Link>
                         </div>

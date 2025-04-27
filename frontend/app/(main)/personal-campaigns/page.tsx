@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
+import React, { useState, useEffect, useRef } from 'react';
+import { DataView, DataViewLayoutOptions, DataViewPageEvent } from 'primereact/dataview';
 import { Button } from 'primereact/button';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
@@ -21,6 +21,10 @@ const formatNumber = (value: number): string => parseFloat(value.toFixed(3)).toS
 const PersonalCampaigns = () => {
     const { getUserCampaigns, address } = useStateContext();
     const router = useRouter();
+
+    const [first, setFirst] = useState(0);
+    const dvRef = useRef<HTMLDivElement>(null);
+    const rows = 6;
 
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [filteredCampaigns, setFilteredCampaigns] = useState<Campaign[] | null>(null);
@@ -79,6 +83,11 @@ const PersonalCampaigns = () => {
             fetchCampaigns();
         }
     }, [address]);
+
+    const onPage = (event: DataViewPageEvent) => {
+        setFirst(event.first);
+        dvRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
+    };
 
     const onFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -322,9 +331,24 @@ const PersonalCampaigns = () => {
     return (
         <div className="grid">
             <div className="col-12 md:px-1 px-0">
-                <div className="card md:px-2 px-1">
-                    <h2 className="md:text-2xl text-xl px-3">Your campaigns</h2>
-                    <DataView value={filteredCampaigns || campaigns} layout={layout} paginator rows={6} sortOrder={sortOrder} sortField={sortField} itemTemplate={itemTemplate} header={dataViewHeader} emptyMessage="No campaigns found." />
+                <div ref={dvRef} className="col-12 md:px-1 px-0">
+                    <div className="card md:px-2 px-1">
+                        <h2 className="md:text-2xl text-xl px-3">Your campaigns</h2>
+                        <p className="mb-4 px-3">Here you can review and manage every campaign you’ve started—track progress, deadlines, and funds all in one place.</p>
+                        <DataView
+                            value={filteredCampaigns || campaigns}
+                            layout={layout}
+                            paginator
+                            first={first}
+                            rows={rows}
+                            onPage={onPage}
+                            sortOrder={sortOrder}
+                            sortField={sortField}
+                            header={dataViewHeader}
+                            itemTemplate={itemTemplate}
+                            emptyMessage="You haven’t created any campaigns yet. Start your first campaign to make a difference!"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
