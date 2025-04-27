@@ -7,3 +7,6 @@
 
 [build.environment]
   CLIENT_ID  = "$CLIENT_ID"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
