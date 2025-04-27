@@ -57,9 +57,13 @@ export default function CampaignDetailsPage({ params }: PageProps) {
     const [amount, setAmount] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showFullAddress, setShowFullAddress] = useState(false);
+    const [hasDonated, setHasDonated] = useState(false);
+    const [hasClaimedRefund, setHasClaimedRefund] = useState(false);
 
     const [filters, setFilters] = useState<DataTableFilterMeta>({});
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+
+    const storageKey = `claimedRefund_${campaign.pId}_${address}`;
 
     const initFilters = () => {
         setFilters({
@@ -84,6 +88,14 @@ export default function CampaignDetailsPage({ params }: PageProps) {
         initFilters();
     }, []);
 
+    useEffect(() => {
+        if (!campaign || !address) return;
+        const stored = localStorage.getItem(storageKey);
+        if (stored === 'true') {
+          setHasClaimedRefund(true);
+        }
+      }, [campaign?.pId, address]);
+      
     const fetchCampaign = async () => {
         try {
             const campaigns = await getCampaigns();
@@ -108,6 +120,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
                 };
             });
             setDonators(list);
+            setHasDonated(list.some((d) => d.donator.toLowerCase() === address?.toLowerCase()));
         } catch (error) {
             console.error('fetchDonators error:', error);
         }
@@ -140,7 +153,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
     const isOwner = address && campaign.owner?.toLowerCase() === address?.toLowerCase();
     const canWithdraw = address && isOwner && targetReached && !campaign.cancelled && !campaign.fundsWithdrawn;
     const canCancel = address && isOwner && !campaign.cancelled && !campaign.fundsWithdrawn;
-    const canClaimRefund = address && (campaign.cancelled || (deadlinePassed && !targetReached));
+    const canClaimRefund = address && hasDonated && !hasClaimedRefund && (campaign.cancelled || (deadlinePassed && !targetReached));
     const canDonate = address && !campaign.cancelled && !campaign.fundsWithdrawn && !deadlinePassed;
 
     const displayedAddress = showFullAddress ? campaign.owner : shortenAddress(campaign.owner);
@@ -254,6 +267,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
         try {
             setIsLoading(true);
             await claimRefund(campaign.pId);
+            setHasClaimedRefund(true);
             toast.current?.show({
                 severity: 'info',
                 summary: 'Refunded',
@@ -263,20 +277,17 @@ export default function CampaignDetailsPage({ params }: PageProps) {
             await fetchCampaign();
         } catch (error: any) {
             console.error('handleClaimRefund error:', error);
-            if (error.code === 4001) {
+            if (error.message?.includes('No contributions to refund')) {
                 toast.current?.show({
-                    severity: 'warn',
-                    summary: 'Cancelled',
-                    detail: 'The transaction was cancelled',
-                    life: 3000
+                    severity: 'info',
+                    summary: 'There is nothing to return',
+                    detail: 'You did not contribute funds to this campaign.',
+                    life: 4000
                 });
+            } else if (error.code === 4001) {
+                toast.current?.show({ severity: 'warn', summary: 'Cancelled', detail: 'The transaction was cancelled', life: 3000 });
             } else {
-                toast.current?.show({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'Refund failed!',
-                    life: 3000
-                });
+                toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Refund failed!', life: 3000 });
             }
         } finally {
             setIsLoading(false);
@@ -392,7 +403,7 @@ export default function CampaignDetailsPage({ params }: PageProps) {
                             <div className="flex align-items-center gap-2">
                                 <i className="pi pi-wallet"></i>
                                 <p className={`creator-block m-0 ownerText ${showFullAddress ? 'wrapAddress' : ''}`} data-pr-tooltip="Funds will be sent to this address." data-pr-position="right" data-pr-mousetrack>
-                                    {showFullAddress ? campaign.owner : shortenAddress(campaign.owner)}
+                                    {displayedAddress}
                                 </p>
                                 <Button icon="pi pi-eye" rounded text aria-label="Toggle full address" onClick={() => setShowFullAddress((prev) => !prev)} />
                             </div>
