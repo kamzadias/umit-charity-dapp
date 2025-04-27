@@ -19,7 +19,7 @@ const formatDate = (timestamp: number): string => {
 const formatNumber = (value: number): string => parseFloat(value.toFixed(3)).toString();
 
 const PersonalCampaigns = () => {
-    const { getUserCampaigns } = useStateContext();
+    const { getUserCampaigns, address } = useStateContext();
     const router = useRouter();
 
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -75,8 +75,10 @@ const PersonalCampaigns = () => {
     };
 
     useEffect(() => {
-        fetchCampaigns();
-    }, []);
+        if (address) {
+            fetchCampaigns();
+        }
+    }, [address]);
 
     const onFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
