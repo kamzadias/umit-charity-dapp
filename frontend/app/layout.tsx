@@ -9,12 +9,21 @@ import '../styles/layout/layout.scss';
 import '../styles/demo/Demos.scss';
 import { StateContextProvider } from '@/layout/context/statecontext';
 import { ThirdwebProvider } from 'thirdweb/react';
+import { useEffect } from 'react';
 
 interface RootLayoutProps {
     children: React.ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+    useEffect(() => {
+        const stored = localStorage.getItem('chosenTheme');
+        const themeLink = document.getElementById('theme-css') as HTMLLinkElement | null;
+        if (stored && themeLink) {
+            themeLink.href = `/themes/${stored}/theme.css`;
+        }
+    }, []);
+
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
