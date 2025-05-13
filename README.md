@@ -9,20 +9,6 @@ A transparent, blockchain-powered charity platform. Ümit Charity DApp consists 
 
 🔗 **LinkedIn:** https://www.linkedin.com/in/kamzadias  
 
----
-
-## 📋 Table of Contents
-
-1. [🚀 Quick Start](#🚀-quick-start)  
-2. [🧪 Testing](#🧪-testing)  
-3. [📦 Available Scripts](#📦-available-scripts)  
-4. [🔧 Configuration](#🔧-configuration)  
-5. [⚙️ Deployment](#⚙️-deployment)  
-6. [🤝 Contributing](#🤝-contributing)  
-7. [📝 License](#📝-license)  
-
----
-
 ## 🚀 Quick Start
 
 ### 1. Clone the repository
