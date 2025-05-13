@@ -7,7 +7,7 @@ A transparent, blockchain-powered charity platform. Ümit Charity DApp consists 
 
 🔗 **Live Demo:** https://umit-charity.netlify.app
 
-🔗 **LinkedIn:** https://www.linkedin.com/in/kamzadias  
+🔗 **LinkedIn:** https://www.linkedin.com/in/dias-kamza
 
 ## 🚀 Quick Start
 
