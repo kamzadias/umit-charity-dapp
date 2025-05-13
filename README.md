@@ -1,6 +1,27 @@
 # Ümit Charity DApp
 
-Monorepo for Ümit — a transparent blockchain-based charity platform, featuring Hardhat smart contracts and a Next.js frontend.
+A transparent, blockchain-powered charity platform. Ümit Charity DApp consists of:
+
+- **Smart Contracts** (Solidity + Hardhat)  
+- **Frontend** (Next.js + Thirdweb)  
+
+🔗 **Live Demo:** https://umit-charity.netlify.app
+
+🔗 **LinkedIn:** https://www.linkedin.com/in/kamzadias  
+
+---
+
+## 📋 Table of Contents
+
+1. [🚀 Quick Start](#🚀-quick-start)  
+2. [🧪 Testing](#🧪-testing)  
+3. [📦 Available Scripts](#📦-available-scripts)  
+4. [🔧 Configuration](#🔧-configuration)  
+5. [⚙️ Deployment](#⚙️-deployment)  
+6. [🤝 Contributing](#🤝-contributing)  
+7. [📝 License](#📝-license)  
+
+---
 
 ## 🚀 Quick Start
 
@@ -11,14 +32,14 @@ git clone git@github.com:kamzadias/umit-charity-dapp.git
 cd umit-charity-dapp
 ```
 
-### 2. Clone the repository
+### 2. Install dependencies
 
-In one terminal
+- In one terminal: `blockchain`
 ```bash
 cd blockchain && npm install
 ```
 
-In another terminal
+- In another terminal: `frontend`
 ```bash
 cd ../frontend && npm install
 ```
@@ -26,21 +47,26 @@ cd ../frontend && npm install
 ### 3. Setup environment variables
 
 ```steps
-# Copy example files
+# blockchain
 cp blockchain/.env.example blockchain/.env
+
+# frontend
 cp frontend/.env.example frontend/.env
 ```
 
 ### 4. Run development environment
-1. Start Hardhat local node
+
+1. Start a local Hardhat node
 ```bash
 cd blockchain
 npx hardhat node
 ```
-2. In another terminal, start the frontend
+
+2. In another terminal, launch the Next.js frontend:
 ```bash
 cd ../frontend
 npm run dev
+
 ```
 3. Open the app
 - Frontend: http://localhost:3000
